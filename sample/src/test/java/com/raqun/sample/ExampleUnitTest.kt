@@ -1,4 +1,4 @@
-package com.raqun.dummyviewpager
+package com.raqun.sample
 
 import org.junit.Test
 
