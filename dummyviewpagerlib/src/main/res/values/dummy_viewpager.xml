@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <declare-styleable name="DummyViewPager">
+        <attr name="slideShow" format="boolean" />
+        <attr name="duration" format="integer" />
+        <attr name="canScroll" format="boolean" />
+        <attr name="velocity" format="integer" />
+    </declare-styleable>
+
+</resources>

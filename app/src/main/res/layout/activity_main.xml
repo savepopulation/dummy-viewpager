@@ -15,4 +15,13 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.raqun.dummyviewpager.DummyViewPager
+        android:id="@+id/dummy_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:canScroll="false"
+        app:duration="1000"
+        app:slideShow="true"
+        app:velocity="100" />
+
 </android.support.constraint.ConstraintLayout>
