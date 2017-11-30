@@ -12,10 +12,10 @@ import java.util.jar.Attributes
 class DummyViewPager(context: Context)
     : ViewPager(context) {
 
-    private var slideShow: Boolean = DEFAULT_SLIDE_SHOW
-    private var duration: Int = DEFAULT_DURATION
-    private var canScroll: Boolean = DEFAULT_CAN_SCROLL
-    private var velocity: Int = DEFAULT_VELOCITY
+    var slideShow: Boolean = DEFAULT_SLIDE_SHOW
+    var duration: Int = DEFAULT_DURATION
+    var canScroll: Boolean = DEFAULT_CAN_SCROLL
+    var velocity: Int = DEFAULT_VELOCITY
 
     init {
         initComponent(null)
@@ -39,7 +39,6 @@ class DummyViewPager(context: Context)
                 duration = getInt(R.styleable.DummyViewPager_duration, DEFAULT_DURATION)
                 canScroll = getBoolean(R.styleable.DummyViewPager_canScroll, DEFAULT_CAN_SCROLL)
                 velocity = getInt(R.styleable.DummyViewPager_velocity, DEFAULT_VELOCITY)
-
             } finally {
                 recycle()
             }
