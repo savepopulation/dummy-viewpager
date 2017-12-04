@@ -58,7 +58,7 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
 
     private fun addCustomSpeedScroller() {
         try {
-            ViewPager::class.java.getDeclaredField(SCOLLER_FIELD_NAME)?.apply {
+            ViewPager::class.java.getDeclaredField(SCROLLER_FIELD_NAME)?.apply {
                 isAccessible = true
             }.also {
                 it?.set(this, CustomSpeedScroller(context, LinearInterpolator(), velocity))
@@ -80,6 +80,6 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
         const val DEFAULT_VELOCITY = 0
 
         // OTHER
-        const val SCOLLER_FIELD_NAME = "mScroller"
+        const val SCROLLER_FIELD_NAME = "mScroller"
     }
 }
