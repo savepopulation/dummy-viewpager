@@ -24,7 +24,15 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
     var slideShow: Boolean = DEFAULT_SLIDE_SHOW
     var duration: Int = DEFAULT_DURATION
     var canScroll: Boolean = DEFAULT_CAN_SCROLL
+
+    /**
+     * Page change speed
+     */
     var velocity: Int = DEFAULT_VELOCITY
+        set(value) {
+            field = value
+            initVelocity()
+        }
 
     init {
         if (attrs != null) {
@@ -35,7 +43,6 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
                     duration = it.getInt(R.styleable.DummyViewPager_duration, DEFAULT_DURATION)
                     canScroll = it.getBoolean(R.styleable.DummyViewPager_canScroll, DEFAULT_CAN_SCROLL)
                     velocity = it.getInt(R.styleable.DummyViewPager_velocity, DEFAULT_VELOCITY)
-                    initComponent()
                 }
             } finally {
                 typedArray.recycle()
@@ -43,7 +50,7 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
         }
     }
 
-    private fun initComponent() {
+    private fun initVelocity() {
         if (velocity > 0) {
             addCustomSpeedScroller()
         }

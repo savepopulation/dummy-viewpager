@@ -18,7 +18,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewById<DummyViewPager>(R.id.pager)?.adapter = PagerAdapter()
+        findViewById<DummyViewPager>(R.id.pager)?.apply {
+            //velocity = 5000
+            adapter = PagerAdapter()
+        }
     }
 
     inner class PagerAdapter : FragmentStatePagerAdapter(supportFragmentManager) {
