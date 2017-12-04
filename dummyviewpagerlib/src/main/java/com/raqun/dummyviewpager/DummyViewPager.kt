@@ -8,6 +8,7 @@ import android.support.v4.content.res.TypedArrayUtils.getBoolean
 import android.support.v4.content.res.TypedArrayUtils.getInt
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.animation.LinearInterpolator
 import java.lang.reflect.Field
 import java.util.jar.Attributes
@@ -23,10 +24,14 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
 
     var slideShow: Boolean = DEFAULT_SLIDE_SHOW
     var duration: Int = DEFAULT_DURATION
-    var canScroll: Boolean = DEFAULT_CAN_SCROLL
 
     /**
-     * Page change speed
+     * ViewPager can scroll
+     */
+    private var canScroll: Boolean = DEFAULT_CAN_SCROLL
+
+    /**
+     * Page scroll speed
      */
     var velocity: Int = DEFAULT_VELOCITY
         set(value) {
@@ -50,6 +55,10 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
         }
     }
 
+    override fun onTouchEvent(ev: MotionEvent?): Boolean = canScroll && super.onTouchEvent(ev)
+
+    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean = canScroll && super.onInterceptTouchEvent(ev)
+
     private fun initVelocity() {
         if (velocity > 0) {
             addCustomSpeedScroller()
@@ -70,6 +79,14 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
         } catch (e: IllegalAccessException) {
             e.printStackTrace()
         }
+    }
+
+    fun enableScrolling() {
+        canScroll = true
+    }
+
+    fun disableScrolling() {
+        canScroll = false
     }
 
     companion object {

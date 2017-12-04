@@ -19,7 +19,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         findViewById<DummyViewPager>(R.id.pager)?.apply {
-            //velocity = 5000
+            velocity = 5000
+            //disableScrolling()
             adapter = PagerAdapter()
         }
     }
