@@ -8,6 +8,8 @@ import android.support.v4.content.res.TypedArrayUtils.getBoolean
 import android.support.v4.content.res.TypedArrayUtils.getInt
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
+import android.view.animation.LinearInterpolator
+import java.lang.reflect.Field
 import java.util.jar.Attributes
 
 /**
@@ -33,6 +35,7 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
                     duration = it.getInt(R.styleable.DummyViewPager_duration, DEFAULT_DURATION)
                     canScroll = it.getBoolean(R.styleable.DummyViewPager_canScroll, DEFAULT_CAN_SCROLL)
                     velocity = it.getInt(R.styleable.DummyViewPager_velocity, DEFAULT_VELOCITY)
+                    initComponent()
                 }
             } finally {
                 typedArray.recycle()
@@ -40,10 +43,36 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
         }
     }
 
+    private fun initComponent() {
+        if (velocity > 0) {
+            addCustomScroller()
+        }
+    }
+
+    private fun addCustomScroller() {
+        try {
+            ViewPager::class.java.getDeclaredField(SCOLLER_FIELD_NAME)?.apply {
+                isAccessible = true
+            }.also {
+                it?.set(this, CustomSpeedScroller(context, LinearInterpolator(), velocity))
+            }
+        } catch (e: NoSuchFieldException) {
+            e.printStackTrace()
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+        } catch (e: IllegalAccessException) {
+            e.printStackTrace()
+        }
+    }
+
     companion object {
+        // DEFAULT VALUES
         const val DEFAULT_SLIDE_SHOW = false
         const val DEFAULT_DURATION = 5000
         const val DEFAULT_CAN_SCROLL = true
-        const val DEFAULT_VELOCITY = 300
+        const val DEFAULT_VELOCITY = 0
+
+        // OTHER
+        const val SCOLLER_FIELD_NAME = "mScroller"
     }
 }

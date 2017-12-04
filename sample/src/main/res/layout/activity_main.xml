@@ -13,6 +13,6 @@
         app:canScroll="true"
         app:duration="1000"
         app:slideShow="false"
-        app:velocity="300" />
+        app:velocity="5000" />
 
 </android.support.constraint.ConstraintLayout>
