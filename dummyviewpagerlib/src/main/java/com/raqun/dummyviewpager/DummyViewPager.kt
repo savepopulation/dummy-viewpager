@@ -45,11 +45,11 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
 
     private fun initComponent() {
         if (velocity > 0) {
-            addCustomScroller()
+            addCustomSpeedScroller()
         }
     }
 
-    private fun addCustomScroller() {
+    private fun addCustomSpeedScroller() {
         try {
             ViewPager::class.java.getDeclaredField(SCOLLER_FIELD_NAME)?.apply {
                 isAccessible = true
