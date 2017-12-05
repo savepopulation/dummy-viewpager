@@ -22,16 +22,19 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
                                                defStyleRes: Int = 0)
     : ViewPager(context, attrs) {
 
-    var slideShow: Boolean = DEFAULT_SLIDE_SHOW
-    var duration: Int = DEFAULT_DURATION
+    /**
+     * ViewPager Mode
+     * DEFAULT, SLIDESHOW
+     */
+    private var mode: PagerMode = PagerMode.DEFAULT
 
     /**
-     * ViewPager can scroll
+     * ViewPager can scroll or not
      */
     private var canScroll: Boolean = DEFAULT_CAN_SCROLL
 
     /**
-     * Page scroll speed
+     * ViewPageR scroll speed
      */
     var velocity: Int = DEFAULT_VELOCITY
         set(value) {
@@ -44,10 +47,11 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
             val typedArray = context.obtainStyledAttributes(attrs, R.styleable.DummyViewPager, defStyle, defStyleRes)
             try {
                 typedArray.let {
-                    slideShow = it.getBoolean(R.styleable.DummyViewPager_slideShow, DEFAULT_SLIDE_SHOW)
-                    duration = it.getInt(R.styleable.DummyViewPager_duration, DEFAULT_DURATION)
                     canScroll = it.getBoolean(R.styleable.DummyViewPager_canScroll, DEFAULT_CAN_SCROLL)
                     velocity = it.getInt(R.styleable.DummyViewPager_velocity, DEFAULT_VELOCITY)
+                    val slideShow = it.getBoolean(R.styleable.DummyViewPager_slideShow, DEFAULT_SLIDE_SHOW)
+                    val duration = it.getInt(R.styleable.DummyViewPager_duration, DEFAULT_DURATION)
+                    if (slideShow) startSliding(duration)
                 }
             } finally {
                 typedArray.recycle()
@@ -89,14 +93,38 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
         canScroll = false
     }
 
+    fun startSliding(duration: Int = DEFAULT_DURATION) {
+        if (mode == PagerMode.SLIDESHOW) {
+            throw IllegalStateException("Pager is already sliding..")
+        }
+
+        mode = PagerMode.SLIDESHOW
+
+        // TODO create a timer and start
+    }
+
+    fun stopSliding() {
+        if (mode == PagerMode.DEFAULT) {
+            throw IllegalStateException("Pager is not sliding..")
+        }
+
+        mode = PagerMode.DEFAULT
+
+        // TODO Remove timer
+    }
+
     companion object {
         // DEFAULT VALUES
-        const val DEFAULT_SLIDE_SHOW = false
-        const val DEFAULT_DURATION = 5000
-        const val DEFAULT_CAN_SCROLL = true
-        const val DEFAULT_VELOCITY = 0
+        private const val DEFAULT_SLIDE_SHOW = false
+        private const val DEFAULT_DURATION = 5000
+        private const val DEFAULT_CAN_SCROLL = true
+        private const val DEFAULT_VELOCITY = 0
 
         // OTHER
-        const val SCROLLER_FIELD_NAME = "mScroller"
+        private const val SCROLLER_FIELD_NAME = "mScroller"
+    }
+
+    enum class PagerMode {
+        DEFAULT, SLIDESHOW
     }
 }
