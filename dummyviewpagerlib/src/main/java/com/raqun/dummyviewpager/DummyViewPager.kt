@@ -26,7 +26,7 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
      * ViewPager Mode
      * DEFAULT, SLIDESHOW
      */
-    private var mode: PagerMode = PagerMode.DEFAULT
+    private var mode: Mode = Mode.DEFAULT
 
     /**
      * ViewPager can scroll or not
@@ -94,21 +94,21 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
     }
 
     fun startSliding(duration: Int = DEFAULT_DURATION) {
-        if (mode == PagerMode.SLIDESHOW) {
-            throw IllegalStateException("Pager is already sliding..")
+        if (mode == Mode.SLIDESHOW) {
+            throw IllegalStateException("ViewPager is already sliding..")
         }
 
-        mode = PagerMode.SLIDESHOW
+        mode = Mode.SLIDESHOW
 
         // TODO create a timer and start
     }
 
     fun stopSliding() {
-        if (mode == PagerMode.DEFAULT) {
-            throw IllegalStateException("Pager is not sliding..")
+        if (mode != Mode.SLIDESHOW) {
+            throw IllegalStateException("ViewPager is not sliding..")
         }
 
-        mode = PagerMode.DEFAULT
+        mode = Mode.DEFAULT
 
         // TODO Remove timer
     }
@@ -124,7 +124,7 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
         private const val SCROLLER_FIELD_NAME = "mScroller"
     }
 
-    enum class PagerMode {
+    enum class Mode {
         DEFAULT, SLIDESHOW
     }
 }
