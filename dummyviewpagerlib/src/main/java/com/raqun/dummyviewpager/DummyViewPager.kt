@@ -4,6 +4,7 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.TypedArray
 import android.os.Build
+import android.os.Handler
 import android.support.v4.content.res.TypedArrayUtils.getBoolean
 import android.support.v4.content.res.TypedArrayUtils.getInt
 import android.support.v4.view.ViewPager
@@ -34,6 +35,30 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
     private var canScroll: Boolean = DEFAULT_CAN_SCROLL
 
     /**
+     * ViewPager Page Change Duration
+     */
+    private var duration: Int = DEFAULT_DURATION
+
+    /**
+     * Slider Handler
+     */
+    private var slideHandler: Handler? = null
+
+    /**
+     * Page Slider
+     */
+    private val pageSlider = object : Runnable {
+        override fun run() {
+            if (isLastItem()) {
+                currentItem = 0
+            } else {
+                currentItem += 1
+            }
+            slideHandler?.postDelayed(this, duration.toLong())
+        }
+    }
+
+    /**
      * ViewPageR scroll speed
      */
     var velocity: Int = DEFAULT_VELOCITY
@@ -49,9 +74,7 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
                 typedArray.let {
                     canScroll = it.getBoolean(R.styleable.DummyViewPager_canScroll, DEFAULT_CAN_SCROLL)
                     velocity = it.getInt(R.styleable.DummyViewPager_velocity, DEFAULT_VELOCITY)
-                    val slideShow = it.getBoolean(R.styleable.DummyViewPager_slideShow, DEFAULT_SLIDE_SHOW)
-                    val duration = it.getInt(R.styleable.DummyViewPager_duration, DEFAULT_DURATION)
-                    if (slideShow) startSliding(duration)
+                    duration = it.getInt(R.styleable.DummyViewPager_duration, DEFAULT_DURATION)
                 }
             } finally {
                 typedArray.recycle()
@@ -62,6 +85,58 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
     override fun onTouchEvent(ev: MotionEvent?): Boolean = canScroll && super.onTouchEvent(ev)
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean = canScroll && super.onInterceptTouchEvent(ev)
+
+    fun enableScrolling() {
+        canScroll = true
+    }
+
+    fun disableScrolling() {
+        canScroll = false
+    }
+
+    fun startSliding(duration: Int) {
+        checkPagerForSliding()
+        if (duration <= MIN_DURATION) {
+            throw IllegalArgumentException("Duration cannot be less than min duration!")
+        }
+
+        this.duration = duration
+        slide()
+    }
+
+    fun startSliding() {
+        checkPagerForSliding()
+        slide()
+    }
+
+    fun stopSliding() {
+        if (mode != Mode.SLIDESHOW) {
+            throw IllegalStateException("ViewPager is not sliding..")
+        }
+
+        mode = Mode.DEFAULT
+        slideHandler?.removeCallbacks(pageSlider)
+        slideHandler = null
+    }
+
+    private fun isLastItem() = currentItem == adapter?.count!! - 1
+
+    private fun slide() {
+        mode = Mode.SLIDESHOW
+        slideHandler = Handler().also {
+            it.postDelayed(pageSlider, duration.toLong())
+        }
+    }
+
+    private fun checkPagerForSliding() {
+        if (mode == Mode.SLIDESHOW) {
+            throw IllegalStateException("ViewPager is already sliding..")
+        }
+
+        if (adapter == null || adapter.count == 0) {
+            throw IllegalArgumentException("Nothing to slide!")
+        }
+    }
 
     private fun initVelocity() {
         if (velocity > 0) {
@@ -85,40 +160,15 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
         }
     }
 
-    fun enableScrolling() {
-        canScroll = true
-    }
-
-    fun disableScrolling() {
-        canScroll = false
-    }
-
-    fun startSliding(duration: Int = DEFAULT_DURATION) {
-        if (mode == Mode.SLIDESHOW) {
-            throw IllegalStateException("ViewPager is already sliding..")
-        }
-
-        mode = Mode.SLIDESHOW
-
-        // TODO create a timer and start
-    }
-
-    fun stopSliding() {
-        if (mode != Mode.SLIDESHOW) {
-            throw IllegalStateException("ViewPager is not sliding..")
-        }
-
-        mode = Mode.DEFAULT
-
-        // TODO Remove timer
-    }
-
     companion object {
         // DEFAULT VALUES
         private const val DEFAULT_SLIDE_SHOW = false
         private const val DEFAULT_DURATION = 5000
         private const val DEFAULT_CAN_SCROLL = true
         private const val DEFAULT_VELOCITY = 0
+
+        // MIN VALUES
+        private const val MIN_DURATION = 100
 
         // OTHER
         private const val SCROLLER_FIELD_NAME = "mScroller"

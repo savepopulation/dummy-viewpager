@@ -2,6 +2,7 @@ package com.raqun.sample
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.view.LayoutInflater
@@ -18,11 +19,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewById<DummyViewPager>(R.id.pager)?.apply {
-            velocity = 5000
-            //disableScrolling()
+        val viewpager = findViewById<DummyViewPager>(R.id.pager)?.apply {
+            velocity = 1000
             adapter = PagerAdapter()
+        }.also {
+            it?.startSliding()
         }
+
+        Handler().postDelayed(Runnable {
+            viewpager?.stopSliding()
+        }, 10000)
     }
 
     inner class PagerAdapter : FragmentStatePagerAdapter(supportFragmentManager) {

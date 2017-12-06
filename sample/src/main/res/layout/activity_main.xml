@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         app:canScroll="true"
         app:duration="1000"
-        app:slideShow="false"
         app:velocity="5000" />
 
 </android.support.constraint.ConstraintLayout>

@@ -2,7 +2,6 @@
 <resources>
 
     <declare-styleable name="DummyViewPager">
-        <attr name="slideShow" format="boolean" />
         <attr name="duration" format="integer" />
         <attr name="canScroll" format="boolean" />
         <attr name="velocity" format="integer" />
