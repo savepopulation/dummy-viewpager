@@ -162,7 +162,6 @@ class DummyViewPager @JvmOverloads constructor(context: Context,
 
     companion object {
         // DEFAULT VALUES
-        private const val DEFAULT_SLIDE_SHOW = false
         private const val DEFAULT_DURATION = 5000
         private const val DEFAULT_CAN_SCROLL = true
         private const val DEFAULT_VELOCITY = 0
