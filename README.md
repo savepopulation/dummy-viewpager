@@ -34,3 +34,16 @@ dummyViewPager.enableScrolling()
 // or
 dummyViewPager.disableScrolling()
 ```
+
+# Dependency
+
+```
+maven { url 'https://jitpack.io' }
+```
+
+```
+dependencies {
+        compile 'com.github.savepopulation:dummy-viewpager:1.0'
+}
+
+```
